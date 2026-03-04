@@ -1,0 +1,2289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Neelavati - Training Dashboard</title>
+    <style>
+        :root {
+            --primary-gold: #d4a574;
+            --darker-gold: #b8860b;
+            --lighter-gold: #f4e4c1;
+            --accent-brown: #6b5344;
+            --text-dark: #2c2416;
+            --text-light: #f5f5f5;
+            --border-gold: #c9a961;
+            --hover-gold: #e6c896;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f9f6f0 0%, #ede7dc 100%);
+            color: var(--text-dark);
+            min-height: 100vh;
+        }
+
+        .container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* SIDEBAR */
+        .sidebar {
+            width: 280px;
+            background: linear-gradient(180deg, var(--darker-gold) 0%, var(--primary-gold) 100%);
+            color: var(--text-light);
+            padding: 20px;
+            overflow-y: auto;
+            position: fixed;
+            height: 100vh;
+            left: 0;
+            top: 0;
+            box-shadow: 2px 0 8px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .logo-section {
+            text-align: center;
+            margin-bottom: 30px;
+            border-bottom: 2px solid rgba(255, 255, 255, 0.2);
+            padding-bottom: 20px;
+        }
+
+        .logo-image {
+            width: 100%;
+            max-width: 180px;
+            height: auto;
+            margin-bottom: 10px;
+            filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+        }
+
+        .logo-text {
+            font-size: 18px;
+            font-weight: 600;
+            letter-spacing: 1px;
+        }
+
+        .tagline {
+            font-size: 10px;
+            color: rgba(255, 255, 255, 0.8);
+            margin-top: 5px;
+            font-style: italic;
+        }
+
+        .nav-section {
+            flex: 1;
+            overflow-y: auto;
+        }
+
+        .nav-title {
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            margin: 20px 0 10px 0;
+            color: rgba(255, 255, 255, 0.7);
+            text-transform: uppercase;
+        }
+
+        .nav-item {
+            padding: 12px 15px;
+            margin-bottom: 8px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 13px;
+            font-weight: 500;
+            border-left: 3px solid transparent;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .nav-item:hover {
+            background: rgba(255, 255, 255, 0.15);
+            border-left-color: var(--lighter-gold);
+            transform: translateX(5px);
+        }
+
+        .nav-item.active {
+            background: rgba(255, 255, 255, 0.25);
+            border-left-color: var(--lighter-gold);
+            font-weight: 600;
+        }
+
+        .nav-icon {
+            width: 18px;
+            height: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+        }
+
+        .contact-section {
+            margin-top: auto;
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+            padding-top: 15px;
+            font-size: 9px;
+            color: rgba(255, 255, 255, 0.85);
+            line-height: 1.4;
+        }
+
+        .contact-label {
+            font-weight: 600;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .contact-person {
+            margin-bottom: 6px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .contact-name {
+            font-weight: 600;
+        }
+
+        /* MAIN CONTENT */
+        .main-content {
+            margin-left: 280px;
+            flex: 1;
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .header {
+            background: linear-gradient(135deg, var(--primary-gold) 0%, var(--lighter-gold) 100%);
+            padding: 30px;
+            border-radius: 12px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 12px rgba(212, 165, 116, 0.15);
+            border: 1px solid var(--border-gold);
+        }
+
+        .header h1 {
+            font-size: 32px;
+            color: var(--text-dark);
+            margin-bottom: 8px;
+            letter-spacing: 0.5px;
+        }
+
+        .header p {
+            color: var(--accent-brown);
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        /* PAGE SECTIONS */
+        .page {
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .page-title {
+            font-size: 28px;
+            color: var(--darker-gold);
+            margin-bottom: 8px;
+            letter-spacing: 0.5px;
+        }
+
+        .page-subtitle {
+            font-size: 14px;
+            color: var(--accent-brown);
+            margin-bottom: 25px;
+            font-weight: 500;
+        }
+
+        /* CARDS AND SECTIONS */
+        .section-card {
+            background: white;
+            border-left: 5px solid var(--primary-gold);
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+        }
+
+        .section-card:hover {
+            box-shadow: 0 4px 16px rgba(212, 165, 116, 0.12);
+            transform: translateY(-2px);
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 15px;
+        }
+
+        .section-icon {
+            width: 32px;
+            height: 32px;
+            background: var(--primary-gold);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 16px;
+        }
+
+        .section-title {
+            font-size: 18px;
+            color: var(--darker-gold);
+            font-weight: 600;
+            margin: 0;
+        }
+
+        .section-content {
+            color: var(--text-dark);
+            line-height: 1.7;
+            font-size: 14px;
+        }
+
+        /* TABLE OF CONTENTS */
+        .toc-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            margin-top: 15px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        .toc-table thead {
+            background: linear-gradient(135deg, var(--primary-gold) 0%, var(--darker-gold) 100%);
+            color: white;
+        }
+
+        .toc-table th {
+            padding: 12px;
+            text-align: left;
+            font-weight: 600;
+            font-size: 13px;
+            letter-spacing: 0.5px;
+        }
+
+        .toc-table td {
+            padding: 12px;
+            border-bottom: 1px solid var(--lighter-gold);
+            font-size: 13px;
+        }
+
+        .toc-table tbody tr:hover {
+            background: rgba(212, 165, 116, 0.08);
+        }
+
+        .duration-badge {
+            background: var(--lighter-gold);
+            color: var(--darker-gold);
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 12px;
+            display: inline-block;
+        }
+
+        /* STATS */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .stat-box {
+            background: white;
+            padding: 18px;
+            border-radius: 8px;
+            text-align: center;
+            border: 1px solid var(--lighter-gold);
+            transition: all 0.3s ease;
+        }
+
+        .stat-box:hover {
+            border-color: var(--primary-gold);
+            box-shadow: 0 4px 12px rgba(212, 165, 116, 0.12);
+        }
+
+        .stat-value {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--primary-gold);
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: var(--accent-brown);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-weight: 600;
+        }
+
+        /* HOME PAGE GRID */
+        .training-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 20px;
+        }
+
+        .training-card {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            border-top: 4px solid var(--primary-gold);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            text-align: center;
+        }
+
+        .training-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 8px 20px rgba(212, 165, 116, 0.2);
+            border-top-color: var(--darker-gold);
+        }
+
+        .training-number {
+            background: var(--lighter-gold);
+            color: var(--darker-gold);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin: 0 auto 12px;
+            font-size: 16px;
+        }
+
+        .training-name {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--darker-gold);
+            margin-bottom: 8px;
+        }
+
+        .training-target {
+            font-size: 12px;
+            color: var(--accent-brown);
+            line-height: 1.5;
+        }
+
+        /* BUTTON STYLES */
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            background: var(--primary-gold);
+            color: var(--text-dark);
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 13px;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            letter-spacing: 0.5px;
+        }
+
+        .btn:hover {
+            background: var(--darker-gold);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(184, 134, 11, 0.3);
+        }
+
+        .btn-secondary {
+            background: var(--lighter-gold);
+            color: var(--darker-gold);
+        }
+
+        .btn-secondary:hover {
+            background: var(--primary-gold);
+            color: var(--text-dark);
+        }
+
+        /* SCROLLBAR STYLING */
+        .sidebar::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .sidebar::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .sidebar::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 3px;
+        }
+
+        .sidebar::-webkit-scrollbar-thumb:hover {
+            background: rgba(255, 255, 255, 0.5);
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+            }
+
+            .sidebar {
+                width: 100%;
+                height: auto;
+                position: relative;
+                margin-bottom: 20px;
+            }
+
+            .main-content {
+                margin-left: 0;
+                padding: 20px;
+            }
+
+            .training-grid {
+                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            }
+
+            .header h1 {
+                font-size: 24px;
+            }
+
+            .page-title {
+                font-size: 22px;
+            }
+
+            .toc-table {
+                font-size: 12px;
+            }
+
+            .toc-table th,
+            .toc-table td {
+                padding: 8px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- SIDEBAR -->
+        <div class="sidebar">
+            <div class="logo-section">
+                <img src="https://agi-prod-file-upload-public-main-use1.s3.amazonaws.com/e5cccb0c-6149-43c6-8ebf-c6d72071bcf8" alt="Neelavati Logo" class="logo-image">
+                <div class="logo-text">Neelavati</div>
+                <div class="tagline">Depth • Elegance • Innovation</div>
+            </div>
+
+            <div class="nav-section">
+                <div class="nav-title">Navigation</div>
+                <div class="nav-item active" onclick="showPage('home')">
+                    <span class="nav-icon">🏠</span>
+                    <span>Home</span>
+                </div>
+
+                <div class="nav-title" style="margin-top: 25px;">Trainings</div>
+                <div class="nav-item" onclick="showPage('training-1')">
+                    <span class="nav-icon">📊</span>
+                    <span>Learning Validation</span>
+                </div>
+                <div class="nav-item" onclick="showPage('training-2')">
+                    <span class="nav-icon">🤝</span>
+                    <span>Collaborative Work</span>
+                </div>
+                <div class="nav-item" onclick="showPage('training-3')">
+                    <span class="nav-icon">💬</span>
+                    <span>Communication Skills</span>
+                </div>
+                <div class="nav-item" onclick="showPage('training-4')">
+                    <span class="nav-icon">🌍</span>
+                    <span>Cultural Training</span>
+                </div>
+                <div class="nav-item" onclick="showPage('training-5')">
+                    <span class="nav-icon">💪</span>
+                    <span>Developing Self Esteem</span>
+                </div>
+                <div class="nav-item" onclick="showPage('training-6')">
+                    <span class="nav-icon">👥</span>
+                    <span>Handling People</span>
+                </div>
+                <div class="nav-item" onclick="showPage('training-7')">
+                    <span class="nav-icon">🚀</span>
+                    <span>Initiative & Entrepreneurship</span>
+                </div>
+                <div class="nav-item" onclick="showPage('training-8')">
+                    <span class="nav-icon">👔</span>
+                    <span>Leadership Skills</span>
+                </div>
+                <div class="nav-item" onclick="showPage('training-9')">
+                    <span class="nav-icon">⚡</span>
+                    <span>Personal Effectiveness</span>
+                </div>
+                <div class="nav-item" onclick="showPage('training-10')">
+                    <span class="nav-icon">🎤</span>
+                    <span>Personal Presentation</span>
+                </div>
+                <div class="nav-item" onclick="showPage('training-11')">
+                    <span class="nav-icon">🧩</span>
+                    <span>Problem Solving</span>
+                </div>
+                <div class="nav-item" onclick="showPage('training-12')">
+                    <span class="nav-icon">📝</span>
+                    <span>Report Writing</span>
+                </div>
+                <div class="nav-item" onclick="showPage('training-13')">
+                    <span class="nav-icon">🔍</span>
+                    <span>Self-Awareness</span>
+                </div>
+                <div class="nav-item" onclick="showPage('training-14')">
+                    <span class="nav-icon">⏰</span>
+                    <span>Time Management</span>
+                </div>
+            </div>
+
+            <div class="contact-section">
+                <div class="contact-label">📞 Contact</div>
+                <div class="contact-person">
+                    <span class="contact-name">Prabhakar Neelakanth</span>
+                    <span>986 030 2745</span>
+                </div>
+                <div class="contact-person">
+                    <span class="contact-name">Venkatesh Yelaburgi</span>
+                    <span>968 993 7193</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- MAIN CONTENT -->
+        <div class="main-content">
+            <!-- HOME PAGE -->
+            <div id="home" class="page active">
+                <div class="header">
+                    <h1>Training Programs Overview</h1>
+                    <p>Comprehensive Soft Skills Development for Corporate Excellence</p>
+                </div>
+
+                <div style="margin-bottom: 30px;">
+                    <h2 style="color: var(--darker-gold); margin-bottom: 20px; font-size: 22px;">14 Core Training Modules</h2>
+                    <p style="color: var(--text-dark); margin-bottom: 20px; line-height: 1.6;">
+                        Our comprehensive training suite is designed to develop essential soft skills for corporate professionals at all levels. Each module is tailored to specific organizational roles and experience levels, delivering practical knowledge and actionable insights.
+                    </p>
+                </div>
+
+                <div class="training-grid">
+                    <div class="training-card" onclick="showPage('training-1')">
+                        <div class="training-number">1</div>
+                        <div class="training-name">Learning Validation</div>
+                        <div class="training-target">Target: CEO / Unit Heads</div>
+                    </div>
+
+                    <div class="training-card" onclick="showPage('training-2')">
+                        <div class="training-number">2</div>
+                        <div class="training-name">Collaborative Work</div>
+                        <div class="training-target">Target: Teams / Departments</div>
+                    </div>
+
+                    <div class="training-card" onclick="showPage('training-3')">
+                        <div class="training-number">3</div>
+                        <div class="training-name">Communication Skills</div>
+                        <div class="training-target">Target: All Staff</div>
+                    </div>
+
+                    <div class="training-card" onclick="showPage('training-4')">
+                        <div class="training-number">4</div>
+                        <div class="training-name">Cultural Training for Onsite</div>
+                        <div class="training-target">Target: Deputed Teams</div>
+                    </div>
+
+                    <div class="training-card" onclick="showPage('training-5')">
+                        <div class="training-number">5</div>
+                        <div class="training-name">Developing Self Esteem</div>
+                        <div class="training-target">Target: Staff / Engineers</div>
+                    </div>
+
+                    <div class="training-card" onclick="showPage('training-6')">
+                        <div class="training-number">6</div>
+                        <div class="training-name">Handling People</div>
+                        <div class="training-target">Target: Managers / Executives</div>
+                    </div>
+
+                    <div class="training-card" onclick="showPage('training-7')">
+                        <div class="training-number">7</div>
+                        <div class="training-name">Initiative & Entrepreneurship</div>
+                        <div class="training-target">Target: Engineers / Managers</div>
+                    </div>
+
+                    <div class="training-card" onclick="showPage('training-8')">
+                        <div class="training-number">8</div>
+                        <div class="training-name">Leadership Skills</div>
+                        <div class="training-target">Target: Leaders / Managers</div>
+                    </div>
+
+                    <div class="training-card" onclick="showPage('training-9')">
+                        <div class="training-number">9</div>
+                        <div class="training-name">Personal Effectiveness</div>
+                        <div class="training-target">Target: All Employees</div>
+                    </div>
+
+                    <div class="training-card" onclick="showPage('training-10')">
+                        <div class="training-number">10</div>
+                        <div class="training-name">Personal Presentation</div>
+                        <div class="training-target">Target: All Employees</div>
+                    </div>
+
+                    <div class="training-card" onclick="showPage('training-11')">
+                        <div class="training-number">11</div>
+                        <div class="training-name">Problem Solving</div>
+                        <div class="training-target">Target: TLs / Supervisors</div>
+                    </div>
+
+                    <div class="training-card" onclick="showPage('training-12')">
+                        <div class="training-number">12</div>
+                        <div class="training-name">Report Writing</div>
+                        <div class="training-target">Target: TLs / Managers</div>
+                    </div>
+
+                    <div class="training-card" onclick="showPage('training-13')">
+                        <div class="training-number">13</div>
+                        <div class="training-name">Self-Awareness</div>
+                        <div class="training-target">Target: All Employees</div>
+                    </div>
+
+                    <div class="training-card" onclick="showPage('training-14')">
+                        <div class="training-number">14</div>
+                        <div class="training-name">Time Management</div>
+                        <div class="training-target">Target: Managers / Executives</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TRAINING PAGES -->
+            <div id="training-1" class="page">
+                <h2 class="page-title">Learning Validation</h2>
+                <p class="page-subtitle">Strategic Assessment for C-Suite Leadership • Target: CEO/Unit Heads</p>
+
+                <div class="stats-grid">
+                    <div class="stat-box">
+                        <div class="stat-value">16</div>
+                        <div class="stat-label">Total Hours</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-value">4</div>
+                        <div class="stat-label">Modules</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-value">Executive</div>
+                        <div class="stat-label">Level</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-value">4 Days</div>
+                        <div class="stat-label">Duration</div>
+                    </div>
+                </div>
+
+                <div class="section-card">
+                    <div class="section-header">
+                        <div class="section-icon">🎯</div>
+                        <h3 class="section-title">Objective of the Training</h3>
+                    </div>
+                    <div class="section-content">
+                        <p>This executive program is designed to empower senior leadership with advanced validation methodologies. Participants will develop sophisticated frameworks for assessing organizational learning, validating strategic initiatives, and ensuring knowledge transfer at enterprise level. The program emphasizes evidence-based decision-making and performance validation across complex organizational structures.</p>
+                    </div>
+                </div>
+
+                <div class="section-card">
+                    <div class="section-header">
+                        <div class="section-icon">📋</div>
+                        <h3 class="section-title">Pre-Requisites</h3>
+                    </div>
+                    <div class="section-content">
+                        <ul style="margin-left: 20px; margin-top: 10px;">
+                            <li>Minimum 10+ years of corporate experience</li>
+                            <li>Current role as CEO, MD, or Unit Head</li>
+                            <li>Exposure to strategic planning and P&L management</li>
+                            <li>Understanding of organizational development concepts</li>
+                            <li>Open mindset to innovative validation approaches</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="section-card">
+                    <div class="section-header">
+                        <div class="section-icon">📚</div>
+                        <h3 class="section-title">Table of Contents</h3>
+                    </div>
+                    <table class="toc-table">
+                        <thead>
+                            <tr>
+                                <th>Module</th>
+                                <th>Sub-Module</th>
+                                <th>Type</th>
+                                <th>Duration</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>1</td>
+                                <td>Fundamentals of Organizational Learning Validation</td>
+                                <td>Theory + Case Study</td>
+                                <td><span class="duration-badge">4 Hrs</span></td>
+                            </tr>
+                            <tr>
+                                <td>2</td>
+                                <td>Strategic Assessment Frameworks</td>
+                                <td>Hands-on Workshop</td>
+                                <td><span class="duration-badge">4 Hrs</span></td>
+                            </tr>
+                            <tr>
+                                <td>3</td>
+                                <td>Measuring Leadership Impact & ROI</td>
+                                <td>Interactive Project</td>
+                                <td><span class="duration-badge">4 Hrs</span></td>
+                            </tr>
+                            <tr>
+                                <td>4</td>
+                                <td>Implementation & Sustainability Models</td>
+                                <td>Real-world Application</td>
+                                <td><span class="duration-badge">4 Hrs</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="section-card">
+                    <div class="section-header">
+                        <div class="section-icon">🛠️</div>
+                        <h3 class="section-title">Tools & Resources</h3>
+                    </div>
+                    <div class="section-content">
+                        Assessment matrices, Strategic planning templates, Digital learning platforms, ROI calculation tools, Executive dashboards, Case study repositories
+                    </div>
+                </div>
+
+                <div class="section-card">
+                    <div class="section-header">
+                        <div class="section-icon">👤</div>
+                        <h3 class="section-title">Training Subject Matter Expert</h3>
+                    </div>
+                    <div class="section-content">
+                        <strong>Prabhakar Neelakanth</strong><br>
+                        Senior Learning Consultant | 36+ Years in Engineering & Manufacturing | Specialist in Organizational Development
+                    </div>
+                </div>
+            </div>
+
+            <!-- TRAINING 2 -->
+            <div id="training-2" class="page">
+                <h2 class="page-title">Collaborative Work</h2>
+                <p class="page-subtitle">Cross-functional Team Excellence • Target: Teams/Departments</p>
+
+                <div class="stats-grid">
+                    <div class="stat-box">
+                        <div class="stat-value">12</div>
+                        <div class="stat-label">Total Hours</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-value">4</div>
+                        <div class="stat-label">Modules</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-value">Intermediate</div>
+                        <div class="stat-label">Level</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-value">3 Days</div>
+                        <div class="stat-label">Duration</div>
+                    </div>
+                </div>
+
+                <div class="section-card">
+                    <div class="section-header">
+                        <div class="section-icon">🎯</div>
+                        <h3 class="section-title">Objective of the Training</h3>
+                    </div>
+                    <div class="section-content">
+                        <p>Build high-performing teams through collaborative frameworks and synergistic working models. This program equips team members with tools to break silos, enhance communication, and achieve collective goals. Emphasis on trust-building, conflict resolution, and leveraging diverse perspectives for organizational innovation.</p>
+                    </div>
+                </div>
+
+                <div class="section-card">
+                    <div class="section-header">
+                        <div class="section-icon">📋</div>
+                        <h3 class="section-title">Pre-Requisites</h3>
+                    </div>
+                    <div class="section-content">
+                        <ul style="margin-left: 20px; margin-top: 10px;">
+                            <li>2+ years of work experience in organizational setting</li>
+                            <li>Current role in team or departmental function</li>
+                            <li>Basic communication skills</li>
+                            <li>Willingness to collaborate and share experiences</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="section-card">
+                    <div class="section-header">
+                        <div class="section-icon">📚</div>
+                        <h3 class="section-title">Table of Contents</h3>
+                    </div>
+                    <table class="toc-table">
+                        <thead>
+                            <tr>
+                                <th>Module</th>
+                                <th>Sub-Module</th>
+                                <th>Type</th>
+                                <th>Duration</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>1</td>
+                                <td>Team Dynamics & Group Psychology</td>
+                                <td>Theory + Discussion</td>
+                                <td><span class="duration-badge">3 Hrs</span></td>
+                            </tr>
+                            <tr>
+                                <td>2</td>
+                                <td>Breaking Silos & Cross-Functional Collaboration</td>
+                                <td>Workshop + Exercise</td>
+                                <td><span class="duration-badge">3 Hrs</span></td>
+                            </tr>
+                            <tr>
+                                <td>3</td>
+                                <td>Conflict Resolution & Consensus Building</td>
+                                <td>Role-play + Case Study</td>
+                                <td><span class="duration-badge">3 Hrs</span></td>
+                            </tr>
+                            <tr>
+                                <td>4</td>
+                                <td>Leveraging Diversity for Innovation</td>
+                                <td>Hands-on Project</td>
+                                <td><span class="duration-badge">3 Hrs</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="section-card">
+                    <div class="section-header">
+                        <div class="section-icon">🛠️</div>
+                        <h3 class="section-title">Tools & Resources</h3>
+                    </div>
+                    <div class="section-content">
+                        Team assessment tools, Collaboration frameworks, Communication templates, Conflict resolution guides, Virtual team collaboration platforms
+                    </div>
+                </div>
+
+                <div class="section-card">
+                    <div class="section-header">
+                        <div class="section-icon">👤</div>
+                        <h3 class="section-title">Training Subject Matter Expert</h3>
+                    </div>
+                    <div class="section-content">
+                        <strong>Prabhakar Neelakanth</strong><br>
+                        Expert in Team Development | 36+ Years in Manufacturing Leadership | Specialist in Organizational Effectiveness
+                    </div>
+                </div>
+            </div>
+
+            <!-- TRAINING 3 -->
+            <div id="training-3" class="page">
+                <h2 class="page-title">Communication Skills</h2>
+                <p class="page-subtitle">Effective Expression & Active Listening • Target: All Staff</p>
+
+                <div class="stats-grid">
+                    <div class="stat-box">
+                        <div class="stat-value">12</div>
+                        <div class="stat-label">Total Hours</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-value">4</div>
+                        <div class="stat-label">Modules</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-value">Foundation</div>
+                        <div class="stat-label">Level</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-value">3 Days</div>
+                        <div class="stat-label">Duration</div>
+                    </div>
+                </div>
+
+                <div class="section-card">
+                    <div class="section-header">
+                        <div class="section-icon">🎯</div>
+                        <h3 class="section-title">Objective of the Training</h3>
+                    </div>
+                    <div class="section-content">
+                        <p>Develop exceptional communication competencies for workplace success. This foundational program covers verbal and non-verbal communication, active listening, persuasion, and feedback delivery. Participants will enhance their ability to articulate ideas clearly, build rapport, and influence outcomes across all organizational levels.</p>
+                    </div>
+                </div>
+
+                <div class="section-card">
+                    <div class="section-header">
+                        <div class="section-icon">📋</div>
+                        <h3 class="section-title">Pre-Requisites</h3>
+                    </div>
+                    <div class="section-content">
+                        <ul style="margin-left: 20px; margin-top: 10px;">
+                            <li>Working knowledge of English language</li>
+                            <li>1+ year of professional experience</li>
+                            <li>Open to feedback and personal growth</li>
+                            <li>Willingness to engage in role-plays and exercises</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="section-card">
+                    <div class="section-header">
+                        <div class="section-icon">📚</div>
+                        <h3 class="section-title">Table of Contents</h3>
+                    </div>
+                    <table class="toc-table">
+                        <thead>
+                            <tr>
+                                <th>Module</th>
+                                <th>Sub-Module</th>
+                                <th>Type</th>
+                                <th>Duration</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>1</td>
+                                <td>Fundamentals of Effective Communication</td>
+                                <td>Theory + Self-assessment</td>
+                                <td><span class="duration-badge">3 Hrs</span></td>
+                            </tr>
+                            <tr>
+                                <td>2</td>
+                                <td>Active Listening & Empathy</td>
+                                <td>Workshop + Practice</td>
+                                <td><span class="duration-badge">3 Hrs</span></td>
+                            </tr>
+                            <tr>
+                                <td>3</td>
+                                <td>Presentation & Persuasion Techniques</td>
+                                <td>Live Presentation</td>
+                                <td><span class="duration-badge">3 Hrs</span></td>
+                            </tr>
+                            <tr>
+                                <td>4</td>
+                                <td>Non-verbal Communication & Influence</td>
+                                <td>Video Review + Exercise</td>
+                                <td><span class="duration-badge">3 Hrs</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="section-card">
+                    <div class="section-header">
+                        <div class="section-icon">🛠️</div>
+                        <h3 class="section-title">Tools & Resources</h3>
+                    </div>
+                    <div class="section-content">
+                        Communication assessment tools, Video feedback technology, Presentation templates, Communication models, Active listening checklists
+                    </div>
+                </div>
+
+                <div class="section-card">
+                    <div class="section-header">
+                        <div class="section-icon">👤</div>
+                        <h3 class="section-title">Training Subject Matter Expert</h3>
+                    </div>
+                    <div class="section-content">
+                        <strong>Prabhakar Neelakanth</strong><br>
+                        Renowned Communication Specialist | 36+ Years in Leadership Coaching | Author & Speaker
+                    </div>
+                </div>
+            </div>
+
+            <!-- TRAINING 4 -->
+            <div id="training-4" class="page">
+                <h2 class="page-title">Cultural Training for Onsite</h2>
+                <p class="page-subtitle">Global Integration & Cultural Intelligence • Target: Deputed Teams</p>
+
+                <div class="stats-grid">
+                    <div class="stat-box">
+                        <div class="stat-value">16</div>
+                        <div class="stat-label">Total Hours</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-value">5</div>
+                        <div class="stat-label">Modules</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-value">Specialized</div>
+                        <div class="stat-label">Level</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-value">4 Days</div>
+                        <div class="stat-label">Duration</div>
+                    </div>
+                </div>
+
+                <div class="section-card">
+                    <div class="section-header">
+                        <div class="section-icon">🎯</div>
+                        <h3 class="section-title">Objective of the Training</h3>
+                    </div>
+                    <div class="section-content">
+                        <p>Prepare professionals for successful international assignments through comprehensive cultural intelligence development. This specialized program addresses cultural adaptation, communication across cultures, and building trust in global environments. Essential for employees deputed to onsite locations across USA and Europe.</p>
+                    </div>
+                </div>
+
+                <div class="section-card">
+                    <div class="section-header">
+                        <div class="section-icon">📋</div>
+                        <h3 class="section-title">Pre-Requisites</h3>
+                    </div>
+                    <div class="section-content">
+                        <ul style="margin-left: 20px; margin-top: 10px;">
+                            <li>Selected for international assignment</li>
+                            <li>3+ years of professional experience</li>
+                            <li>Working proficiency in English</li>
+                            <li>Awareness of basic global business practices</li>
+                            <li>Openness to diverse cultural perspectives</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="section-card">
+                    <div class="section-header">
+                        <div class="section-icon">📚</div>
+                        <h3 class="section-title">Table of Contents</h3>
+                    </div>
+                    <table class="toc-table">
+                        <thead>
+                            <tr>
+                                <th>Module</th>
+                                <th>Sub-Module</th>
+                                <th>Type</th>
+                                <th>Duration</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>1</td>
+                                <td>Understanding Cultural Dimensions & Diversity</td>
+                                <td>Theory + Assessment</td>
+                                <td><span class="duration-badge">3 Hrs</span></td>
+                            </tr>
+                            <tr>
+                                <td>2</td>
+                                <td>Global Business Etiquette & Protocols</td>
+                                <td>Workshop + Demo</td>
+                                <td><span class="duration-badge">4 Hrs</span></td>
+                            </tr>
+                            <tr>
+                                <td>3</td>
+                                <td>Navigating Western Work Culture</td>
+                                <td>Case Study + Discussion</td>
+                                <td><span class="duration-badge">3 Hrs</span></td>
+                            </tr>
+                            <tr>
+                                <td>4</td>
+                                <td>Cross-Cultural Communication & Adaptation</td>
+                                <td>Role-play + Simulation</td>
+                                <td><span class="duration-badge">3 Hrs</span></td>
+                            </tr>
+                            <tr>
+                                <td>5</td>
+                                <td>Building Global Networks & Relationships</td>
+                                <td>Interactive Session</td>
+                                <td><span class="duration-badge">3 Hrs</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="section-card">
+                    <div class="section-header">
+                        <div class="section-icon">🛠️</div>
+                        <h3 class="section-title">Tools & Resources</h3>
+                    </div>
+                    <div class="section-content">
+                        Cultural assessment tools, Global etiquette guides, Country-specific briefing documents, Language basics, Virtual team collaboration guides
+                    </div>
+                </div>
+
+                <div class="section-card">
+                    <div class="section-header">
+                        <div class="section-icon">👤</div>
+                        <h3 class="section-title">Training Subject Matter Expert</h3>
+                    </div>
+                    <div class="section-content">
+                        <strong>Prabhakar Neelakanth</strong><br>
+                        Global Training Expert | 20+ Years International Experience | USA & Europe Operations Knowledge
+                    </div>
+                </div>
+            </div>
+
+            <!-- TRAINING 5 -->
+            <div id="training-5" class="page">
+                <h2 class="page-title">Developing Self Esteem</h2>
+                <p class="page-subtitle">Confidence Building & Personal Empowerment • Target: Staff/Engineers</p>
+
+                <div class="stats-grid">
+                    <div class="stat-box">
+                        <div class="stat-value">10</div>
+                        <div class="stat-label">Total Hours</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-value">3</div>
+                        <div class="stat-label">Modules</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-value">Foundation</div>
+                        <div class="stat-label">Level</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-value">3 Days</div>
+                        <div class="stat-label">Duration</div>
+                    </div>
+                </div>
+
+                <div class="section-card">
+                    <div class="section-header">
+                        <div class="section-icon">🎯</div>
+                        <h3 class="section-title">Objective of the Training</h3>
+                    </div>
+                    <div class="section-content">
+                        <p>Build confidence and self-belief through comprehensive self-esteem development. This program helps professionals overcome self-doubt, recognize personal strengths, and develop a positive self-image. Emphasis on self-compassion, resilience, and creating sustainable behavioral change for enhanced career performance.</p>
+                    </div>
+                </div>
+
+                <div class="section-card">
+                    <div class="section-header">
+                        <div class="section-icon">📋</div>
+                        <h3 class="section-title">Pre-Requisites</h3>
+                    </div>
+                    <div class="section-content">
+                        <ul style="margin-left: 20px; margin-top: 10px;">
+                            <li>1+ year of work experience</li>
+                            <li>Willingness to introspect and reflect</li>
+                            <li>Commitment to personal development</li>
+                            <li>Open to group discussions and sharing</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="section-card">
+                    <div class="section-header">
+                        <div class="section-icon">📚</div>
+                        <h3 class="section-title">Table of Contents</h3>
+                    </div>
+                    <table class="toc-table">
+                        <thead>
+                            <tr>
+                                <th>Module</th>
+                                <th>Sub-Module</th>
+                                <th>Type</th>
+                                <th>Duration</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>1</td>
+                                <td>Understanding Self-Esteem & Its Impact</td>
+                                <td>Theory + Personal Assessment</td>
+                                <td><span class="duration-badge">3 Hrs</span></td>
+                            </tr>
+                            <tr>
+                                <td>2</td>
+                                <td>Identifying Strengths & Overcoming Limiting Beliefs</td>
+                                <td>Workshop + Reflection</td>
+                                <td><span class="duration-badge">4 Hrs</span></td>
+                            </tr>
+                            <tr>
+                                <td>3</td>
+                                <td>Building Confidence & Resilience</td>
+                                <td>Practical Exercise</td>
+                                <td><span class="duration-badge">3 Hrs</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="section-card">
+                    <div class="section-header">
+                        <div class="section-icon">🛠️</div>
+                        <h3 class="section-title">Tools & Resources</h3>
+                    </div>
+                    <div class="section-content">
+                        Self-assessment questionnaires, Confidence building exercises, Journaling templates, Resilience frameworks, Positive psychology tools
+                    </div>
+                </div>
+
+                <div class="section-card">
+                    <div class="section-header">
+                        <div class="section-icon">👤</div>
+                        <h3 class="section-title">Training Subject Matter Expert</h3>
+                    </div>
+                    <div class="section-content">
+                        <strong>Prabhakar Neelakanth</strong><br>
+                        Personal Development Coach | Behavioral Change Specialist | Certified in Positive Psychology
+                    </div>
+                </div>
+            </div>
+
+            <!-- TRAINING 6 -->
+            <div id="training-6" class="page">
+                <h2 class="page-title">Handling People</h2>
+                <p class="page-subtitle">Interpersonal Excellence & Team Management • Target: Managers/Executives</p>
+
+                <div class="stats-grid">
+                    <div class="stat-box">
+                        <div class="stat-value">14</div>
+                        <div class="stat-label">Total Hours</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-value">4</div>
+                        <div class="stat-label">Modules</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-value">Intermediate</div>
+                        <div class="stat-label">Level</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-value">4 Days</div>
+                        <div class="stat-label">Duration</div>
+                    </div>
+                </div>
+
+                <div class="section-card">
+                    <div class="section-header">
+                        <div class="section-icon">🎯</div>
+                        <h3 class="section-title">Objective of the Training</h3>
+                    </div>
+                    <div class="section-content">
+                        <p>Master the art and science of people management. This program equips managers with advanced techniques for employee engagement, motivation, performance management, and retention. Focus on emotional intelligence, difficult conversations, and creating high-performing teams through people-centric leadership.</p>
+                    </div>
+                </div>
+
+                <div class="section-card">
+                    <div class="section-header">
+                        <div class="section-icon">📋</div>
+                        <h3 class="section-title">Pre-Requisites</h3>
+                    </div>
+                    <div class="section-content">
+                        <ul style="margin-left: 20px; margin-top: 10px;">
+                            <li>Current managerial position or team lead role</li>
+                            <li>3+ years of management experience</li>
+                            <li>Responsibility for direct reports</li>
+                            <li>Interest in developing people management skills</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="section-card">
+                    <div class="section-header">
+                        <div class="section-icon">📚</div>
+                        <h3 class="section-title">Table of Contents</h3>
+                    </div>
+                    <table class="toc-table">
+                        <thead>
+                            <tr>
+                                <th>Module</th>
+                                <th>Sub-Module</th>
+                                <th>Type</th>
+                                <th>Duration</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>1</td>
+                                <td>Emotional Intelligence & Self-Awareness</td>
+                                <td>Assessment + Theory</td>
+                                <td><span class="duration-badge">3 Hrs</span></td>
+                            </tr>
+                            <tr>
+                                <td>2</td>
+                                <td>Motivation & Performance Management</td>
+                                <td>Workshop + Case Study</td>
+                                <td><span class="duration-badge">4 Hrs</span></td>
+                            </tr>
+                            <tr>
+                                <td>3</td>
+                                <td>Difficult Conversations & Conflict Management</td>
+                                <td>Role-play + Feedback</td>
+                                <td><span class="duration-badge">4 Hrs</span></td>
+                            </tr>
+                            <tr>
+                                <td>4</td>
+                                <td>Building Trust & Team Engagement</td>
+                                <td>Interactive Session</td>
+                                <td><span class="duration-badge">3 Hrs</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="section-card">
+                    <div class="section-header">
+                        <div class="section-icon">🛠️</div>
+                        <h3 class="section-title">Tools & Resources</h3>
+                    </div>
+                    <div class="section-content">
+                        EI assessments, Performance management templates, Feedback frameworks, Conflict resolution protocols, Employee engagement surveys
+                    </div>
+                </div>
+
+                <div class="section-card">
+                    <div class="section-header">
+                        <div class="section-icon">👤</div>
+                        <h3 class="section-title">Training Subject Matter Expert</h3>
+                    </div>
+                    <div class="section-content">
+                        <strong>Prabhakar Neelakanth</strong><br>
+                        Management Consultant | HR Development Specialist | 36+ Years in Organizational Leadership
+                    </div>
+                </div>
+            </div>
+
+            <!-- TRAINING 7 -->
+            <div id="training-7" class="page">
+                <h2 class="page-title">Initiative & Entrepreneurship</h2>
+                <p class="page-subtitle">Innovative Thinking & Business Acumen • Target: Engineers/Managers</p>
+
+                <div class="stats-grid">
+                    <div class="stat-box">
+                        <div class="stat-value">14</div>
+                        <div class="stat-label">Total Hours</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-value">4</div>
+                        <div class="stat-label">Modules</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-value">Advanced</div>
+                        <div class="stat-label">Level</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-value">4 Days</div>
+                        <div class="stat-label">Duration</div>
+                    </div>
+                </div>
+
+                <div class="section-card">
+                    <div class="section-header">
+                        <div class="section-icon">🎯</div>
+                        <h3 class="section-title">Objective of the Training</h3>
+                    </div>
+                    <div class="section-content">
+                        <p>Cultivate entrepreneurial mindset and innovation capabilities. This advanced program teaches intrapreneurship, business case development, and creating value within corporate environments. Participants learn to identify opportunities, manage risks, and drive organizational growth through innovative initiatives and strategic thinking.</p>
+                    </div>
+                </div>
+
+                <div class="section-card">
+                    <div class="section-header">
+                        <div class="section-icon">📋</div>
+                        <h3 class="section-title">Pre-Requisites</h3>
+                    </div>
+                    <div class="section-content">
+                        <ul style="margin-left: 20px; margin-top: 10px;">
+                            <li>5+ years of professional experience</li>
+                            <li>Technical/Engineering or management background</li>
+                            <li>Interest in business development</li>
+                            <li>Demonstrated initiative in previous roles</li>
+                            <li>Understanding of basic business principles</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="section-card">
+                    <div class="section-header">
+                        <div class="section-icon">📚</div>
+                        <h3 class="section-title">Table of Contents</h3>
+                    </div>
+                    <table class="toc-table">
+                        <thead>
+                            <tr>
+                                <th>Module</th>
+                                <th>Sub-Module</th>
+                                <th>Type</th>
+                                <th>Duration</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>1</td>
+                                <td>Entrepreneurial Mindset & Innovation Thinking</td>
+                                <td>Theory + Ideation Workshop</td>
+                                <td><span class="duration-badge">3 Hrs</span></td>
+                            </tr>
+                            <tr>
+                                <td>2</td>
+                                <td>Opportunity Recognition & Business Case Development</td>
+                                <td>Hands-on Project</td>
+                                <td><span class="duration-badge">4 Hrs</span></td>
+                            </tr>
+                            <tr>
+                                <td>3</td>
+                                <td>Risk Management & Resource Optimization</td>
+                                <td>Case Study + Simulation</td>
+                                <td><span class="duration-badge">4 Hrs</span></td>
+                            </tr>
+                            <tr>
+                                <td>4</td>
+                                <td>Scaling Ideas & Organizational Intraprenuership</td>
+                                <td>Presentation + Feedback</td>
+                                <td><span class="duration-badge">3 Hrs</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="section-card">
+                    <div class="section-header">
+                        <div class="section-icon">🛠️</div>
+                        <h3 class="section-title">Tools & Resources</h3>
+                    </div>
+                    <div class="section-content">
+                        Business model templates, Feasibility analysis tools, Innovation frameworks, Risk assessment matrices, Market research guides
+                    </div>
+                </div>
+
+                <div class="section-card">
+                    <div class="section-header">
+                        <div class="section-icon">👤</div>
+                        <h3 class="section-title">Training Subject Matter Expert</h3>
+                    </div>
+                    <div class="section-content">
+                        <strong>Prabhakar Neelakanth</strong><br>
+                        Business Development Consultant | Entrepreneurship Coach | PDLC Expert
+                    </div>
+                </div>
+            </div>
+
+            <!-- TRAINING 8 -->
+            <div id="training-8" class="page">
+                <h2 class="page-title">Leadership Skills</h2>
+                <p class="page-subtitle">Strategic Leadership & Organizational Impact • Target: Leaders/Managers</p>
+
+                <div class="stats-grid">
+                    <div class="stat-box">
+                        <div class="stat-value">16</div>
+                        <div class="stat-label">Total Hours</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-value">5</div>
+                        <div class="stat-label">Modules</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-value">Advanced</div>
+                        <div class="stat-label">Level</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-value">4 Days</div>
+                        <div class="stat-label">Duration</div>
+                    </div>
+                </div>
+
+                <div class="section-card">
+                    <div class="section-header">
+                        <div class="section-icon">🎯</div>
+                        <h3 class="section-title">Objective of the Training</h3>
+                    </div>
+                    <div class="section-content">
+                        <p>Develop comprehensive leadership capabilities for organizational transformation. This strategic program covers visionary leadership, change management, executive presence, and driving organizational culture. Designed for established and aspiring leaders seeking to maximize their impact and create lasting value.</p>
+                    </div>
+                </div>
+
+                <div class="section-card">
+                    <div class="section-header">
+                        <div class="section-icon">📋</div>
+                        <h3 class="section-title">Pre-Requisites</h3>
+                    </div>
+                    <div class="section-content">
+                        <ul style="margin-left: 20px; margin-top: 10px;">
+                            <li>7+ years of professional experience</li>
+                            <li>Current leadership position or identified leader</li>
+                            <li>Responsibility for teams or business units</li>
+                            <li>Commitment to continuous leadership development</li>
+                            <li>Strategic thinking capability</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="section-card">
+                    <div class="section-header">
+                        <div class="section-icon">📚</div>
+                        <h3 class="section-title">Table of Contents</h3>
+                    </div>
+                    <table class="toc-table">
+                        <thead>
+                            <tr>
+                                <th>Module</th>
+                                <th>Sub-Module</th>
+                                <th>Type</th>
+                                <th>Duration</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>1</td>
+                                <td>Leadership Fundamentals & Self-Assessment</td>
+                                <td>Assessment + Coaching</td>
+                                <td><span class="duration-badge">3 Hrs</span></td>
+                            </tr>
+                            <tr>
+                                <td>2</td>
+                                <td>Visionary Leadership & Strategic Thinking</td>
+                                <td>Workshop + Case Study</td>
+                                <td><span class="duration-badge">4 Hrs</span></td>
+                            </tr>
+                            <tr>
+                                <td>3</td>
+                                <td>Change Management & Organizational Culture</td>
+                                <td>Interactive Session</td>
+                                <td><span class="duration-badge">4 Hrs</span></td>
+                            </tr>
+                            <tr>
+                                <td>4</td>
+                                <td>Executive Presence & Influence</td>
+                                <td>Role-play + Feedback</td>
+                                <td><span class="duration-badge">3 Hrs</span></td>
+                            </tr>
+                            <tr>
+                                <td>5</td>
+                                <td>Building Sustainable Leadership Legacy</td>
+                                <td>Reflection + Planning</td>
+                                <td><span class="duration-badge">2 Hrs</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="section-card">
+                    <div class="section-header">
+                        <div class="section-icon">🛠️</div>
+                        <h3 class="section-title">Tools & Resources</h3>
+                    </div>
+                    <div class="section-content">
+                        360-degree feedback tools, Leadership style assessments, Strategic planning templates, Change management frameworks, Mentoring guides
+                    </div>
+                </div>
+
+                <div class="section-card">
+                    <div class="section-header">
+                        <div class="section-icon">👤</div>
+                        <h3 class="section-title">Training Subject Matter Expert</h3>
+                    </div>
+                    <div class="section-content">
+                        <strong>Prabhakar Neelakanth</strong><br>
+                        Executive Coach | Leadership Development Specialist | 36+ Years in Strategic Leadership
+                    </div>
+                </div>
+            </div>
+
+            <!-- TRAINING 9 -->
+            <div id="training-9" class="page">
+                <h2 class="page-title">Personal Effectiveness</h2>
+                <p class="page-subtitle">Productivity & Professional Excellence • Target: All Employees</p>
+
+                <div class="stats-grid">
+                    <div class="stat-box">
+                        <div class="stat-value">10</div>
+                        <div class="stat-label">Total Hours</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-value">3</div>
+                        <div class="stat-label">Modules</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-value">Foundation</div>
+                        <div class="stat-label">Level</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-value">2 Days</div>
+                        <div class="stat-label">Duration</div>
+                    </div>
+                </div>
+
+                <div class="section-card">
+                    <div class="section-header">
+                        <div class="section-icon">🎯</div>
+                        <h3 class="section-title">Objective of the Training</h3>
+                    </div>
+                    <div class="section-content">
+                        <p>Enhance personal effectiveness and workplace productivity. This foundational program equips employees with practical tools to improve efficiency, manage priorities, and maximize personal impact. Focus on work-life balance, goal-setting, and creating sustainable high-performance habits.</p>
+                    </div>
+                </div>
+
+                <div class="section-card">
+                    <div class="section-header">
+                        <div class="section-icon">📋</div>
+                        <h3 class="section-title">Pre-Requisites</h3>
+                    </div>
+                    <div class="section-content">
+                        <ul style="margin-left: 20px; margin-top: 10px;">
+                            <li>1+ year of work experience</li>
+                            <li>Interest in personal development</li>
+                            <li>Willingness to apply new practices</li>
+                            <li>Access to common productivity tools</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="section-card">
+                    <div class="section-header">
+                        <div class="section-icon">📚</div>
+                        <h3 class="section-title">Table of Contents</h3>
+                    </div>
+                    <table class="toc-table">
+                        <thead>
+                            <tr>
+                                <th>Module</th>
+                                <th>Sub-Module</th>
+                                <th>Type</th>
+                                <th>Duration</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>1</td>
+                                <td>Understanding Personal Effectiveness</td>
+                                <td>Theory + Self-Assessment</td>
+                                <td><span class="duration-badge">3 Hrs</span></td>
+                            </tr>
+                            <tr>
+                                <td>2</td>
+                                <td>Priority Management & Goal Setting</td>
+                                <td>Workshop + Planning</td>
+                                <td><span class="duration-badge">4 Hrs</span></td>
+                            </tr>
+                            <tr>
+                                <td>3</td>
+                                <td>Sustaining Excellence & Work-Life Balance</td>
+                                <td>Interactive Session</td>
+                                <td><span class="duration-badge">3 Hrs</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="section-card">
+                    <div class="section-header">
+                        <div class="section-icon">🛠️</div>
+                        <h3 class="section-title">Tools & Resources</h3>
+                    </div>
+                    <div class="section-content">
+                        Productivity assessment tools, Planning templates, Goal-setting frameworks, Time-tracking tools, Well-being guides
+                    </div>
+                </div>
+
+                <div class="section-card">
+                    <div class="section-header">
+                        <div class="section-icon">👤</div>
+                        <h3 class="section-title">Training Subject Matter Expert</h3>
+                    </div>
+                    <div class="section-content">
+                        <strong>Prabhakar Neelakanth</strong><br>
+                        Performance Coach | Productivity Consultant | Well-being Specialist
+                    </div>
+                </div>
+            </div>
+
+            <!-- TRAINING 10 -->
+            <div id="training-10" class="page">
+                <h2 class="page-title">Personal Presentation</h2>
+                <p class="page-subtitle">Professional Image & Impact Delivery • Target: All Employees</p>
+
+                <div class="stats-grid">
+                    <div class="stat-box">
+                        <div class="stat-value">12</div>
+                        <div class="stat-label">Total Hours</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-value">3</div>
+                        <div class="stat-label">Modules</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-value">Foundation</div>
+                        <div class="stat-label">Level</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-value">3 Days</div>
+                        <div class="stat-label">Duration</div>
+                    </div>
+                </div>
+
+                <div class="section-card">
+                    <div class="section-header">
+                        <div class="section-icon">🎯</div>
+                        <h3 class="section-title">Objective of the Training</h3>
+                    </div>
+                    <div class="section-content">
+                        <p>Master the art of personal presentation and professional image creation. This program covers etiquette, appearance, body language, and presentation skills. Participants learn to make memorable first impressions, present with confidence, and cultivate professional gravitas across all settings.</p>
+                    </div>
+                </div>
+
+                <div class="section-card">
+                    <div class="section-header">
+                        <div class="section-icon">📋</div>
+                        <h3 class="section-title">Pre-Requisites</h3>
+                    </div>
+                    <div class="section-content">
+                        <ul style="margin-left: 20px; margin-top: 10px;">
+                            <li>1+ year of professional work experience</li>
+                            <li>Interest in professional image development</li>
+                            <li>Openness to feedback on presentation style</li>
+                            <li>Willingness to participate in practice sessions</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="section-card">
+                    <div class="section-header">
+                        <div class="section-icon">📚</div>
+                        <h3 class="section-title">Table of Contents</h3>
+                    </div>
+                    <table class="toc-table">
+                        <thead>
+                            <tr>
+                                <th>Module</th>
+                                <th>Sub-Module</th>
+                                <th>Type</th>
+                                <th>Duration</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>1</td>
+                                <td>Professional Appearance & Etiquette</td>
+                                <td>Theory + Demo</td>
+                                <td><span class="duration-badge">3 Hrs</span></td>
+                            </tr>
+                            <tr>
+                                <td>2</td>
+                                <td>Body Language & Non-Verbal Communication</td>
+                                <td>Workshop + Video Review</td>
+                                <td><span class="duration-badge">4 Hrs</span></td>
+                            </tr>
+                            <tr>
+                                <td>3</td>
+                                <td>Presentation Skills & Executive Presence</td>
+                                <td>Live Practice + Feedback</td>
+                                <td><span class="duration-badge">5 Hrs</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="section-card">
+                    <div class="section-header">
+                        <div class="section-icon">🛠️</div>
+                        <h3 class="section-title">Tools & Resources</h3>
+                    </div>
+                    <div class="section-content">
+                        Presentation templates, Etiquette guides, Video feedback technology, Professional wardrobe guidelines, Personal branding frameworks
+                    </div>
+                </div>
+
+                <div class="section-card">
+                    <div class="section-header">
+                        <div class="section-icon">👤</div>
+                        <h3 class="section-title">Training Subject Matter Expert</h3>
+                    </div>
+                    <div class="section-content">
+                        <strong>Prabhakar Neelakanth</strong><br>
+                        Professional Image Consultant | Presentation Skills Expert | Corporate Communication Specialist
+                    </div>
+                </div>
+            </div>
+
+            <!-- TRAINING 11 -->
+            <div id="training-11" class="page">
+                <h2 class="page-title">Problem Solving</h2>
+                <p class="page-subtitle">Analytical Thinking & Solution Development • Target: TLs/Supervisors</p>
+
+                <div class="stats-grid">
+                    <div class="stat-box">
+                        <div class="stat-value">12</div>
+                        <div class="stat-label">Total Hours</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-value">4</div>
+                        <div class="stat-label">Modules</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-value">Intermediate</div>
+                        <div class="stat-label">Level</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-value">3 Days</div>
+                        <div class="stat-label">Duration</div>
+                    </div>
+                </div>
+
+                <div class="section-card">
+                    <div class="section-header">
+                        <div class="section-icon">🎯</div>
+                        <h3 class="section-title">Objective of the Training</h3>
+                    </div>
+                    <div class="section-content">
+                        <p>Develop structured problem-solving capabilities for supervisory and team lead roles. This program teaches analytical frameworks, creative thinking techniques, and implementation strategies. Participants learn to diagnose root causes, generate innovative solutions, and drive sustainable improvements in their teams and operations.</p>
+                    </div>
+                </div>
+
+                <div class="section-card">
+                    <div class="section-header">
+                        <div class="section-icon">📋</div>
+                        <h3 class="section-title">Pre-Requisites</h3>
+                    </div>
+                    <div class="section-content">
+                        <ul style="margin-left: 20px; margin-top: 10px;">
+                            <li>Team lead or supervisor position</li>
+                            <li>3+ years of professional experience</li>
+                            <li>Responsibility for operational issues</li>
+                            <li>Basic analytical and logical thinking</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="section-card">
+                    <div class="section-header">
+                        <div class="section-icon">📚</div>
+                        <h3 class="section-title">Table of Contents</h3>
+                    </div>
+                    <table class="toc-table">
+                        <thead>
+                            <tr>
+                                <th>Module</th>
+                                <th>Sub-Module</th>
+                                <th>Type</th>
+                                <th>Duration</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>1</td>
+                                <td>Analytical Problem-Solving Framework</td>
+                                <td>Theory + Exercise</td>
+                                <td><span class="duration-badge">3 Hrs</span></td>
+                            </tr>
+                            <tr>
+                                <td>2</td>
+                                <td>Root Cause Analysis & Diagnosis</td>
+                                <td>Workshop + Case Study</td>
+                                <td><span class="duration-badge">3 Hrs</span></td>
+                            </tr>
+                            <tr>
+                                <td>3</td>
+                                <td>Creative Solution Generation</td>
+                                <td>Brainstorming + Hands-on</td>
+                                <td><span class="duration-badge">3 Hrs</span></td>
+                            </tr>
+                            <tr>
+                                <td>4</td>
+                                <td>Implementation & Continuous Improvement</td>
+                                <td>Project + Review</td>
+                                <td><span class="duration-badge">3 Hrs</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="section-card">
+                    <div class="section-header">
+                        <div class="section-icon">🛠️</div>
+                        <h3 class="section-title">Tools & Resources</h3>
+                    </div>
+                    <div class="section-content">
+                        Problem-solving frameworks (5W2H, Fishbone, 8D), Decision-making matrices, Creative thinking tools, Process improvement templates, Kaizen methodologies
+                    </div>
+                </div>
+
+                <div class="section-card">
+                    <div class="section-header">
+                        <div class="section-icon">👤</div>
+                        <h3 class="section-title">Training Subject Matter Expert</h3>
+                    </div>
+                    <div class="section-content">
+                        <strong>Prabhakar Neelakanth</strong><br>
+                        Process Improvement Expert | Problem-Solving Consultant | Manufacturing Systems Specialist
+                    </div>
+                </div>
+            </div>
+
+            <!-- TRAINING 12 -->
+            <div id="training-12" class="page">
+                <h2 class="page-title">Report Writing</h2>
+                <p class="page-subtitle">Professional Documentation & Communication • Target: TLs/Managers</p>
+
+                <div class="stats-grid">
+                    <div class="stat-box">
+                        <div class="stat-value">10</div>
+                        <div class="stat-label">Total Hours</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-value">3</div>
+                        <div class="stat-label">Modules</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-value">Foundation</div>
+                        <div class="stat-label">Level</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-value">3 Days</div>
+                        <div class="stat-label">Duration</div>
+                    </div>
+                </div>
+
+                <div class="section-card">
+                    <div class="section-header">
+                        <div class="section-icon">🎯</div>
+                        <h3 class="section-title">Objective of the Training</h3>
+                    </div>
+                    <div class="section-content">
+                        <p>Master professional report writing for corporate communication. This program teaches structured writing, clarity, business impact, and persuasive documentation. Participants learn to create executive summaries, technical reports, business proposals, and performance reviews that influence decision-making.</p>
+                    </div>
+                </div>
+
+                <div class="section-card">
+                    <div class="section-header">
+                        <div class="section-icon">📋</div>
+                        <h3 class="section-title">Pre-Requisites</h3>
+                    </div>
+                    <div class="section-content">
+                        <ul style="margin-left: 20px; margin-top: 10px;">
+                            <li>Team lead or manager position</li>
+                            <li>2+ years of report writing responsibility</li>
+                            <li>Strong English language proficiency</li>
+                            <li>Interest in improving documentation quality</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="section-card">
+                    <div class="section-header">
+                        <div class="section-icon">📚</div>
+                        <h3 class="section-title">Table of Contents</h3>
+                    </div>
+                    <table class="toc-table">
+                        <thead>
+                            <tr>
+                                <th>Module</th>
+                                <th>Sub-Module</th>
+                                <th>Type</th>
+                                <th>Duration</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>1</td>
+                                <td>Business Writing Fundamentals</td>
+                                <td>Theory + Examples</td>
+                                <td><span class="duration-badge">3 Hrs</span></td>
+                            </tr>
+                            <tr>
+                                <td>2</td>
+                                <td>Report Structure & Organization</td>
+                                <td>Workshop + Templates</td>
+                                <td><span class="duration-badge">4 Hrs</span></td>
+                            </tr>
+                            <tr>
+                                <td>3</td>
+                                <td>Executive Communication & Persuasive Writing</td>
+                                <td>Practice + Feedback</td>
+                                <td><span class="duration-badge">3 Hrs</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="section-card">
+                    <div class="section-header">
+                        <div class="section-icon">🛠️</div>
+                        <h3 class="section-title">Tools & Resources</h3>
+                    </div>
+                    <div class="section-content">
+                        Report templates, Style guides, Grammar and editing tools, Executive summary formats, Business proposal frameworks
+                    </div>
+                </div>
+
+                <div class="section-card">
+                    <div class="section-header">
+                        <div class="section-icon">👤</div>
+                        <h3 class="section-title">Training Subject Matter Expert</h3>
+                    </div>
+                    <div class="section-content">
+                        <strong>Prabhakar Neelakanth</strong><br>
+                        Technical Writer | Business Communication Expert | Documentation Specialist
+                    </div>
+                </div>
+            </div>
+
+            <!-- TRAINING 13 -->
+            <div id="training-13" class="page">
+                <h2 class="page-title">Self-Awareness</h2>
+                <p class="page-subtitle">Personal Insight & Behavioral Intelligence • Target: All Employees</p>
+
+                <div class="stats-grid">
+                    <div class="stat-box">
+                        <div class="stat-value">10</div>
+                        <div class="stat-label">Total Hours</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-value">3</div>
+                        <div class="stat-label">Modules</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-value">Foundation</div>
+                        <div class="stat-label">Level</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-value">2 Days</div>
+                        <div class="stat-label">Duration</div>
+                    </div>
+                </div>
+
+                <div class="section-card">
+                    <div class="section-header">
+                        <div class="section-icon">🎯</div>
+                        <h3 class="section-title">Objective of the Training</h3>
+                    </div>
+                    <div class="section-content">
+                        <p>Develop deep self-awareness for personal and professional growth. This program uses psychometric assessments, feedback techniques, and reflective practices to help employees understand their behavioral patterns, values, and interpersonal impact. Foundation for all other soft skills development.</p>
+                    </div>
+                </div>
+
+                <div class="section-card">
+                    <div class="section-header">
+                        <div class="section-icon">📋</div>
+                        <h3 class="section-title">Pre-Requisites</h3>
+                    </div>
+                    <div class="section-content">
+                        <ul style="margin-left: 20px; margin-top: 10px;">
+                            <li>1+ year of work experience</li>
+                            <li>Openness to self-reflection and feedback</li>
+                            <li>Maturity to handle personal insights</li>
+                            <li>Commitment to personal development</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="section-card">
+                    <div class="section-header">
+                        <div class="section-icon">📚</div>
+                        <h3 class="section-title">Table of Contents</h3>
+                    </div>
+                    <table class="toc-table">
+                        <thead>
+                            <tr>
+                                <th>Module</th>
+                                <th>Sub-Module</th>
+                                <th>Type</th>
+                                <th>Duration</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>1</td>
+                                <td>Understanding Self-Awareness & Its Importance</td>
+                                <td>Theory + Assessment</td>
+                                <td><span class="duration-badge">3 Hrs</span></td>
+                            </tr>
+                            <tr>
+                                <td>2</td>
+                                <td>Values, Beliefs & Personality Patterns</td>
+                                <td>Workshop + Reflection</td>
+                                <td><span class="duration-badge">4 Hrs</span></td>
+                            </tr>
+                            <tr>
+                                <td>3</td>
+                                <td>Interpersonal Impact & Behavioral Feedback</td>
+                                <td>360-Degree Review + Coaching</td>
+                                <td><span class="duration-badge">3 Hrs</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="section-card">
+                    <div class="section-header">
+                        <div class="section-icon">🛠️</div>
+                        <h3 class="section-title">Tools & Resources</h3>
+                    </div>
+                    <div class="section-content">
+                        Myers-Briggs Type Indicator, 360-degree feedback tools, Personality assessments, Reflective journaling templates, Values clarification exercises
+                    </div>
+                </div>
+
+                <div class="section-card">
+                    <div class="section-header">
+                        <div class="section-icon">👤</div>
+                        <h3 class="section-title">Training Subject Matter Expert</h3>
+                    </div>
+                    <div class="section-content">
+                        <strong>Prabhakar Neelakanth</strong><br>
+                        Behavioral Change Expert | Psychology-based Coach | Certified Assessment Specialist
+                    </div>
+                </div>
+            </div>
+
+            <!-- TRAINING 14 -->
+            <div id="training-14" class="page">
+                <h2 class="page-title">Time Management</h2>
+                <p class="page-subtitle">Productivity Optimization & Priority Management • Target: Managers/Executives</p>
+
+                <div class="stats-grid">
+                    <div class="stat-box">
+                        <div class="stat-value">12</div>
+                        <div class="stat-label">Total Hours</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-value">4</div>
+                        <div class="stat-label">Modules</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-value">Intermediate</div>
+                        <div class="stat-label">Level</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-value">3 Days</div>
+                        <div class="stat-label">Duration</div>
+                    </div>
+                </div>
+
+                <div class="section-card">
+                    <div class="section-header">
+                        <div class="section-icon">🎯</div>
+                        <h3 class="section-title">Objective of the Training</h3>
+                    </div>
+                    <div class="section-content">
+                        <p>Master advanced time and priority management for executive effectiveness. This program teaches strategic time allocation, delegation, energy management, and eliminating time wasters. Designed for managers and executives seeking to maximize productivity while maintaining well-being.</p>
+                    </div>
+                </div>
+
+                <div class="section-card">
+                    <div class="section-header">
+                        <div class="section-icon">📋</div>
+                        <h3 class="section-title">Pre-Requisites</h3>
+                    </div>
+                    <div class="section-content">
+                        <ul style="margin-left: 20px; margin-top: 10px;">
+                            <li>Management or executive position</li>
+                            <li>5+ years of professional experience</li>
+                            <li>Responsibility for multiple priorities</li>
+                            <li>Interest in productivity optimization</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="section-card">
+                    <div class="section-header">
+                        <div class="section-icon">📚</div>
+                        <h3 class="section-title">Table of Contents</h3>
+                    </div>
+                    <table class="toc-table">
+                        <thead>
+                            <tr>
+                                <th>Module</th>
+                                <th>Sub-Module</th>
+                                <th>Type</th>
+                                <th>Duration</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>1</td>
+                                <td>Time Management Principles & Assessment</td>
+                                <td>Theory + Self-Analysis</td>
+                                <td><span class="duration-badge">3 Hrs</span></td>
+                            </tr>
+                            <tr>
+                                <td>2</td>
+                                <td>Priority Setting & Decision Making</td>
+                                <td>Workshop + Planning</td>
+                                <td><span class="duration-badge">3 Hrs</span></td>
+                            </tr>
+                            <tr>
+                                <td>3</td>
+                                <td>Delegation & Stakeholder Management</td>
+                                <td>Interactive Session</td>
+                                <td><span class="duration-badge">3 Hrs</span></td>
+                            </tr>
+                            <tr>
+                                <td>4</td>
+                                <td>Energy Management & Sustainable Performance</td>
+                                <td>Coaching + Application</td>
+                                <td><span class="duration-badge">3 Hrs</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="section-card">
+                    <div class="section-header">
+                        <div class="section-icon">🛠️</div>
+                        <h3 class="section-title">Tools & Resources</h3>
+                    </div>
+                    <div class="section-content">
+                        Eisenhower Matrix, Time-tracking tools, Priority management templates, Delegation frameworks, Calendar optimization strategies, Well-being guides
+                    </div>
+                </div>
+
+                <div class="section-card">
+                    <div class="section-header">
+                        <div class="section-icon">👤</div>
+                        <h3 class="section-title">Training Subject Matter Expert</h3>
+                    </div>
+                    <div class="section-content">
+                        <strong>Prabhakar Neelakanth</strong><br>
+                        Executive Effectiveness Coach | Time Management Consultant | Work-Life Balance Specialist
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function showPage(pageId) {
+            // Hide all pages
+            const pages = document.querySelectorAll('.page');
+            pages.forEach(page => page.classList.remove('active'));
+
+            // Show selected page
+            const selectedPage = document.getElementById(pageId);
+            if (selectedPage) {
+                selectedPage.classList.add('active');
+            }
+
+            // Update active nav item
+            const navItems = document.querySelectorAll('.nav-item');
+            navItems.forEach(item => item.classList.remove('active'));
+
+            // Find and mark active nav item
+            event.target.closest('.nav-item')?.classList.add('active');
+            if (pageId === 'home') {
+                document.querySelector('[onclick="showPage(\'home\')"]').classList.add('active');
+            }
+        }
+    </script>
+</body>
+</html>
